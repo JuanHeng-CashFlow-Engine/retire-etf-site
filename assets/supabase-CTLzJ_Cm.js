@@ -1,0 +1,1 @@
+import{t as e}from"./vendor-supabase-BEPoSw_h.js";var t=`https://dhhazovgtpcxunmdnlqd.supabase.co`,n=`sb_publishable_GN1ot7iq-QgbnHn5mUX2Zg_E5KFHIQu`,r=!!n,i=r?e(t,n,{auth:{persistSession:!0,autoRefreshToken:!0,detectSessionInUrl:!0}}):null;function a(){if(!i)throw Error(`尚未設定 Supabase 公開連線資訊。`);return i}export{a as n,i as r,r as t};

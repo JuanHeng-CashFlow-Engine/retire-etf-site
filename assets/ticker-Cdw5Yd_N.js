@@ -1,0 +1,1 @@
+var e=/\.(TW|TWO)$/i;function t(e){return String(e??``).trim().toUpperCase()}function n(n){return t(n).replace(e,``)}function r(e){let r=t(e);if(!r)return[];let i=n(r);if(!/^\d{4,6}[A-Z]?$/.test(i))return[r];let a=r===i?[`${i}.TW`,`${i}.TWO`,i]:[r,i,`${i}.TW`,`${i}.TWO`];return[...new Set(a)]}function i(e,t){let r=n(e),i=n(t);return!!(r&&i&&r===i)}export{n as i,i as n,r,t};
