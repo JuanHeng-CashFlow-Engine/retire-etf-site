@@ -1,0 +1,56 @@
+name: Deploy artifact-only GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout deployment artifact
+        uses: actions/checkout@v4
+
+      - name: Verify artifact-only boundary
+        shell: bash
+        run: |
+          unexpected="$(git ls-files | awk '
+            $0 == ".nojekyll" || $0 == "deployment.json" || $0 == "index.html" ||
+            $0 == ".github/workflows/pages.yml" || $0 ~ /^assets\// || $0 ~ /^images\// { next }
+            { print }
+          ')"
+          if [ -n "$unexpected" ]; then
+            echo 'Unexpected files in the public artifact repository:' >&2
+            printf '%s\n' "$unexpected" >&2
+            exit 1
+          fi
+          if find . -type f -name '*.map' -print -quit | grep -q .; then
+            echo 'Source maps must not be published.' >&2
+            exit 1
+          fi
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
