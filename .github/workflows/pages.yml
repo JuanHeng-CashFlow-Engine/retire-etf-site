@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
           unexpected="$(git ls-files | awk '
-            $0 == ".nojekyll" || $0 == "deployment.json" || $0 == "index.html" ||
+            $0 == ".nojekyll" || $0 == "_redirects" || $0 == "deployment.json" || $0 == "index.html" ||
             $0 == ".github/workflows/pages.yml" || $0 ~ /^assets\// || $0 ~ /^images\// { next }
             { print }
           ')"
@@ -53,4 +53,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
